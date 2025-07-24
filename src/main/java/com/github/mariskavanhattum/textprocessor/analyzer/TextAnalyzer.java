@@ -1,15 +1,12 @@
 package com.github.mariskavanhattum.textprocessor.analyzer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class TextAnalyzer implements WordFrequencyAnalyzer {
     @Override
     public int calculateHighestFrequency(String text) {
         String[] words = getWordsFromText(text);
 
-        // Loop through words, adding them to a word-frequency index
         ArrayList<WordInfo> wordIndex =
                 createWordFrequencyIndexFromWords(words);
 
@@ -40,10 +37,13 @@ public class TextAnalyzer implements WordFrequencyAnalyzer {
         ArrayList<WordInfo> wordIndex =
                 createWordFrequencyIndexFromWords(words);
 
-        // TODO get most frequent n words
-        // TODO alphabetically sort words with same frequency
+        wordIndex.sort(Comparator.comparingInt(WordInfo::getFrequency)
+                        .thenComparing(WordInfo::getWord)
+        );
 
-        return new ArrayList<>(wordIndex);
+        List<WordInfo> list = wordIndex.stream().limit(n).toList();
+
+        return new ArrayList<>(list);
     }
 
     private static String[] getWordsFromText(String text) {
@@ -54,6 +54,7 @@ public class TextAnalyzer implements WordFrequencyAnalyzer {
     }
 
     private static ArrayList<WordInfo> createWordFrequencyIndexFromWords(String[] words) {
+        // Loop through words, adding them to a word-frequency index
         ArrayList<WordInfo> wordIndex = new ArrayList<>();
         for (String word : words) {
             boolean wordPresentInIndex = false;
