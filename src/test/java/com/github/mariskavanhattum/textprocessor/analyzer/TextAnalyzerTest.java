@@ -35,6 +35,11 @@ class TextAnalyzerTest {
             assertEquals(3,
                     textAnalyzer.calculateHighestFrequency(textWithCaseDifferingDuplicates));
         }
+
+        @Test
+        void emptyText() {
+            assertEquals(0, textAnalyzer.calculateHighestFrequency(""));
+        }
     }
 
     @Nested
@@ -45,9 +50,6 @@ class TextAnalyzerTest {
                     textAnalyzer.calculateFrequencyForWord(exampleText, "the"));
             assertEquals(1,
                     textAnalyzer.calculateFrequencyForWord(exampleText, "sun")
-            );
-            assertEquals(0,
-                    textAnalyzer.calculateFrequencyForWord(exampleText, "absent")
             );
         }
 
@@ -64,6 +66,11 @@ class TextAnalyzerTest {
         }
 
         @Test
+        void emptyText() {
+            assertEquals(0, textAnalyzer.calculateFrequencyForWord("", "absentWord"));
+        }
+
+        @Test
         void invalidInputWordThrowsException() {
             IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                     () -> textAnalyzer.calculateFrequencyForWord("text", "invalid_word"));
@@ -73,7 +80,7 @@ class TextAnalyzerTest {
     }
 
     @Nested
-    class CalculateMostFrequentWords {
+    class CalculateMostFrequentNWords {
         @Test
         void exampleText() {
             List<WordFrequency> expected = List.of(
@@ -116,6 +123,20 @@ class TextAnalyzerTest {
                     () -> textAnalyzer.calculateMostFrequentNWords(someTextWithOneUniqueWord, 2));
             assertEquals("Input integer 2 is too high. Input text" +
                     " contains 1 unique word.", e.getMessage());
+        }
+
+        @Test
+        void nEqualToZeroThrowsException() {
+            IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                    () -> textAnalyzer.calculateMostFrequentNWords("text", 0));
+            assertEquals("Input integer should be positive.", e.getMessage());
+        }
+
+        @Test
+        void nNegativeThrowsException() {
+            IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                    () -> textAnalyzer.calculateMostFrequentNWords("text", -1));
+            assertEquals("Input integer should be positive.", e.getMessage());
         }
     }
 
