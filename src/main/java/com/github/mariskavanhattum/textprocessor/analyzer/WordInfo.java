@@ -52,11 +52,9 @@ public class WordInfo implements WordFrequency {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("class WordInfo {\n");
-        sb.append("    word: ").append(word).append("\n");
-        sb.append("    frequency: ").append(frequency).append("\n");
-        sb.append("}");
-        return sb.toString();
+        return "class WordInfo {\n" +
+                "    word: " + word + "\n" +
+                "    frequency: " + frequency + "\n" +
+                "}";
     }
 }
