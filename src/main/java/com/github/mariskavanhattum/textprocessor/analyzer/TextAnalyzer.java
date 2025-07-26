@@ -33,8 +33,6 @@ public class TextAnalyzer implements WordFrequencyAnalyzer {
      * <p>
      * Frequency is case-insensitive. Words can consist of characters a-z and
      * A-Z. Any non-alphabetical character is considered separator of words.
-     * <p>
-     *
      * @param text input text
      * @param word word for which the frequency is counted
      * @return the frequency of the word in the input text
@@ -79,13 +77,13 @@ public class TextAnalyzer implements WordFrequencyAnalyzer {
 
         guardInputIntegerAtMostWordIndexSize(n, wordIndex.size());
 
-        // Sort wordIndex on highest frequency, then alphabetically
+        // Sort wordIndex by descending frequency, then alphabetically
         wordIndex.sort(
                 Comparator.comparingInt(WordInfo::getFrequency).reversed()
                         .thenComparing(WordInfo::getWord)
         );
 
-        // Get the first n
+        // Get the first n words from the index
         List<WordInfo> mostFrequentNWords = wordIndex.stream().limit(n).toList();
 
         return new ArrayList<>(mostFrequentNWords);

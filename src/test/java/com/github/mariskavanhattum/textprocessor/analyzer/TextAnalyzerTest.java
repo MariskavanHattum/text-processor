@@ -49,8 +49,7 @@ class TextAnalyzerTest {
             assertEquals(2,
                     textAnalyzer.calculateFrequencyForWord(exampleText, "the"));
             assertEquals(1,
-                    textAnalyzer.calculateFrequencyForWord(exampleText, "sun")
-            );
+                    textAnalyzer.calculateFrequencyForWord(exampleText, "sun"));
         }
 
         @Test
@@ -97,10 +96,13 @@ class TextAnalyzerTest {
 
         @Test
         void textWithVariousSeparatorCharacters() {
-            List<WordFrequency> expected = List.of(new WordInfo("a", 2));
+            List<WordFrequency> expected = List.of(
+                    new WordInfo("a", 2),
+                    new WordInfo("and", 1)
+            );
 
             List<WordFrequency> actual =
-                    textAnalyzer.calculateMostFrequentNWords(textWithVariousSeparatorCharacters, 1);
+                    textAnalyzer.calculateMostFrequentNWords(textWithVariousSeparatorCharacters, 2);
 
             assertEquals(expected, actual);
         }
@@ -139,7 +141,6 @@ class TextAnalyzerTest {
             assertEquals("Input integer should be positive.", e.getMessage());
         }
     }
-
 }
 
 
