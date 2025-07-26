@@ -2,13 +2,12 @@ package com.github.mariskavanhattum.textprocessor.analyzer;
 
 import java.util.*;
 
-public class TextAnalyzer implements WordFrequencyAnalyzer {
+public final class TextAnalyzer implements WordFrequencyAnalyzer {
     @Override
     public int calculateHighestFrequency(String text) {
         String[] words = getWordsFromText(text);
 
-        ArrayList<WordInfo> wordIndex =
-                createWordFrequencyIndexFromWords(words);
+        ArrayList<WordInfo> wordIndex = createWordFrequencyIndexFromWords(words);
 
         // Return maximum of frequencies
         return wordIndex.stream()
@@ -18,6 +17,8 @@ public class TextAnalyzer implements WordFrequencyAnalyzer {
 
     @Override
     public int calculateFrequencyForWord(String text, String word) {
+        guardInputWordIsValid(word);
+
         String[] words = getWordsFromText(text);
 
         int frequency = 0;
@@ -34,10 +35,12 @@ public class TextAnalyzer implements WordFrequencyAnalyzer {
     public List<WordFrequency> calculateMostFrequentNWords(String text, int n) {
         String[] words = getWordsFromText(text);
 
-        ArrayList<WordInfo> wordIndex =
-                createWordFrequencyIndexFromWords(words);
+        ArrayList<WordInfo> wordIndex = createWordFrequencyIndexFromWords(words);
 
-        wordIndex.sort(Comparator.comparingInt(WordInfo::getFrequency)
+        guardInputIntegerAtMostWordIndexSize(n, wordIndex.size());
+
+        wordIndex.sort(
+                Comparator.comparingInt(WordInfo::getFrequency).reversed()
                         .thenComparing(WordInfo::getWord)
         );
 
@@ -75,4 +78,21 @@ public class TextAnalyzer implements WordFrequencyAnalyzer {
         return wordIndex;
     }
 
+    private static void guardInputWordIsValid(String word) {
+        if (!word.matches("^[a-zA-Z]*$")) {
+            throw new IllegalArgumentException("Input word '" + word + "' is " +
+                    "invalid. Can only contain alphabetical characters a-z, " +
+                    "A-Z.");
+        }
+    }
+
+    private static void guardInputIntegerAtMostWordIndexSize(int n,
+                                                             int indexSize) {
+        if (n > indexSize) {
+            String message = "Input integer " + n + " is too high. Input text" +
+                    " contains " + indexSize + " unique word" +
+                    (indexSize > 1 ? "s" : "") + ".";
+            throw new IllegalArgumentException(message);
+        }
+    }
 }
